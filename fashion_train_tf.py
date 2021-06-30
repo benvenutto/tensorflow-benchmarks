@@ -1,24 +1,27 @@
 import tensorflow as tf
-import numpy as np
 
-fashion_mnist = tf.keras.datasets.fashion_mnist
-(train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+device_name = 'CPU'
+device_id = f'/device:{device_name}:0'
 
-print(train_images.shape, len(train_labels), test_images.shape, len(test_labels))
+with tf.device(device_id):
+    fashion_mnist = tf.keras.datasets.fashion_mnist
+    (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
 
-train_images = train_images / 255.0
-test_images = test_images / 255.0
+    print(train_images.shape, len(train_labels), test_images.shape, len(test_labels))
 
-model = tf.keras.Sequential([
-    tf.keras.layers.Flatten(input_shape=(28, 28)),
-    tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(10)
-])
+    train_images = train_images / 255.0
+    test_images = test_images / 255.0
 
-model.compile(optimizer='adam',
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-              metrics=['accuracy'])
+    model = tf.keras.Sequential([
+        tf.keras.layers.Flatten(input_shape=(28, 28)),
+        tf.keras.layers.Dense(128, activation='relu'),
+        tf.keras.layers.Dense(10)
+    ])
 
-model.fit(train_images, train_labels, epochs=10)
+    model.compile(optimizer='adam',
+                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                  metrics=['accuracy'])
 
-test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+    model.fit(train_images, train_labels, epochs=10)
+
+    test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
