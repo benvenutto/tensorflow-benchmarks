@@ -1,8 +1,10 @@
 import tensorflow as tf
 
 device_name = 'CPU'
-device_id = f'/device:{device_name}:0'
+batch_size=64
+num_epochs=20
 
+device_id = f'/device:{device_name}:0'
 with tf.device(device_id):
     fashion_mnist = tf.keras.datasets.fashion_mnist
     (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
@@ -15,6 +17,7 @@ with tf.device(device_id):
     model = tf.keras.Sequential([
         tf.keras.layers.Flatten(input_shape=(28, 28)),
         tf.keras.layers.Dense(128, activation='relu'),
+        tf.keras.layers.Dense(128, activation='relu'),
         tf.keras.layers.Dense(10)
     ])
 
@@ -22,6 +25,6 @@ with tf.device(device_id):
                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                   metrics=['accuracy'])
 
-    model.fit(train_images, train_labels, epochs=10)
+    model.fit(train_images, train_labels, batch_size=batch_size, epochs=num_epochs)
 
-    test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+    test_loss, test_acc = model.evaluate(test_images,  test_labels, batch_size=batch_size, verbose=2)
