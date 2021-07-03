@@ -1,8 +1,8 @@
 import tensorflow as tf
 
-device_name = 'CPU'
+device_name = 'GPU'
 batch_size=64
-num_epochs=20
+num_epochs=10
 
 device_id = f'/device:{device_name}:0'
 with tf.device(device_id):
@@ -13,6 +13,12 @@ with tf.device(device_id):
 
     train_images = train_images / 255.0
     test_images = test_images / 255.0
+
+    class ResidualBlock(keras.layers.Leyer):
+        """A residual block (ResNet) for image processing.
+        """
+
+
 
     model = tf.keras.Sequential([
         tf.keras.layers.Flatten(input_shape=(28, 28)),
